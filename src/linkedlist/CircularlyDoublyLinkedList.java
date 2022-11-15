@@ -1,6 +1,6 @@
 package linkedlist;
 
-public class DoublyLinkedList {
+public class CircularlyDoublyLinkedList {
 
     class Node {
         int data;
@@ -18,33 +18,40 @@ public class DoublyLinkedList {
     Node tail = null;
     int size = 0;
 
-    // addAtHead() will add a new node to the head of the doubly linked list
+    // addAtHead() will add a new node to the head of the circularly doubly linked list
     public void addAtHead(int data) {
         Node newNode = new Node(data);
-        if (head == null) {
+        if (size == 0 ) {
             head = tail = newNode;
+            head.previousNode = tail;
+            tail.nextNode = head;
         } else {
-            head.previousNode = newNode;
             newNode.nextNode = head;
+            newNode.previousNode = tail;
+            head.previousNode = newNode;
+            tail.nextNode = newNode;
             head = newNode;
         }
         size++;
     }
 
-    // addAtTail() append a node of value val to the end of the doubled linked list.
+    // addAtTail() append a node of value val to the end of the circularly doubled linked list.
     public void addAtTail(int data) {
         Node newNode = new Node(data);
         if (head == null) {
-            head = tail = newNode;
+            tail.nextNode = head;
+            head.previousNode = tail;
         } else {
+            newNode.nextNode = head;
             tail.nextNode = newNode;
             newNode.previousNode = tail;
             tail = newNode;
+            head.previousNode = newNode;
         }
         size++;
     }
 
-    private Node getNode(int index) {
+    public Node getNode(int index) {
         Node node = head;
         if (index < 0) {
             System.out.println("Index lower than zero.");
@@ -81,18 +88,6 @@ public class DoublyLinkedList {
         }
     }
 
-    // traverse() will traverse the doubly linked list from left to right
-    public void traverse() {
-        if (head == null) {
-            return;
-        }
-        Node current = head;
-        while (current != null) {
-            System.out.println(current.data);
-            current = current.nextNode;
-        }
-    }
-
     // search() will return the index of given node or -1
     public int search(int value) {
         if (head == null) {
@@ -100,25 +95,40 @@ public class DoublyLinkedList {
         }
         Node currentNode = head;
         int index = 0;
-        while (currentNode != null) {
+        do {
             if(currentNode.data == value) {
                 return index;
             }
             index++;
             currentNode = currentNode.nextNode;
-        }
+        } while (currentNode != head);
         return -1;
     }
 
-    // deleteEntireList() method will remove references to all nodes in list.
-    public void deleteEntireList() {
-        Node currentNode = head;
-        while (currentNode != null) {
-            Node tmpNode = currentNode;
-            currentNode = currentNode.nextNode;
-            tmpNode.nextNode = null;
+    // traverse() will traverse the circularly doubly linked list from left to right
+    public void traverse() {
+        if (head == null) {
+            System.out.println("Empty List.");
+            return;
         }
-        head = tail = null;
+        Node current = head;
+        do {
+            System.out.println(current.data);
+            current = current.nextNode;
+        } while (current != head);
+    }
+
+    // print the nodes values
+    public void print() {
+        if (head == null) {
+            System.out.println("Empty List.");
+            return;
+        }
+        Node current = head;
+        do {
+            System.out.println(current.data);
+            current = current.nextNode;
+        } while (current != head);
     }
 
     // deleteAtIndex() method will remove the node from a given index
@@ -131,80 +141,67 @@ public class DoublyLinkedList {
         }
         if (index == 0) {
             head = head.nextNode;
-            head.previousNode = null;
+            tail.nextNode = head;
+            head.previousNode = tail;
         } else {
             Node previousNode = getNode(index - 1);
             previousNode.nextNode = previousNode.nextNode.nextNode;
             if (previousNode.nextNode.nextNode != null) {
                 previousNode.nextNode.nextNode.previousNode = previousNode;
             }
-            if (index == size - 1) {
+            if (size == index - 1) {
                 tail = previousNode;
             }
         }
         size--;
     }
 
-    // print the nodes values
-    public void print() {
-        if (head == null) {
-            System.out.println("Empty List.");
-            return;
-        }
-        Node current = head;
-        while (current != null) {
-            System.out.println(current.data);
-            current = current.nextNode;
-        }
-    }
-
     public static void main(String[] args) {
-        DoublyLinkedList doublyLinkedList = new DoublyLinkedList();
+        CircularlyLinkedList circularlyLinkedList = new CircularlyLinkedList();
 
-        doublyLinkedList.addAtTail(1);
-        doublyLinkedList.addAtTail(2);
-        doublyLinkedList.addAtTail(3);
-        doublyLinkedList.addAtTail(4);
-        doublyLinkedList.addAtTail(5);
-        doublyLinkedList.addAtTail(6);
+        circularlyLinkedList.addAtTail(1);
+        circularlyLinkedList.addAtTail(2);
+        circularlyLinkedList.addAtTail(3);
+        circularlyLinkedList.addAtTail(4);
+        circularlyLinkedList.addAtTail(5);
+        circularlyLinkedList.addAtTail(6);
+        // circularlyLinkedList  = 1->2->3->4->5->6->null
 
-        /* 0<->1<->2<->3<->4<->5->6->null */
+        // Play with all the methods
 
-        // linkedList = 0->1->2->3->4->5->null
+        circularlyLinkedList.print();
 
-        // print the nodes of the linked list
-        doublyLinkedList.print();
-        //output: 0 1 2 3 4 5 6
 
         // print the nodes of the linked list
         System.out.println("----------------");
         System.out.println("Traversing list:");
-        doublyLinkedList.traverse();
+        circularlyLinkedList.traverse();
         //output: 0 1 2 3 4 5 6
         System.out.println("----------------");
         System.out.println("search result(Index of value 4):");
-        System.out.println(doublyLinkedList.search(4));
+        System.out.println(circularlyLinkedList.search(4));
         System.out.println("----------------");
         System.out.println("search result(Index of value 6):");
-        System.out.println(doublyLinkedList.search(6));
+        System.out.println(circularlyLinkedList.search(6));
 
         // Delete a specific node
         System.out.println("----------------");
         System.out.println("Delete a specific node: 3");
-        doublyLinkedList.deleteAtIndex(3);
+        circularlyLinkedList.deleteAtIndex(3);
 
         // print the nodes of the linked list
         System.out.println("----------------");
         System.out.println("print the nodes of the linked list");
-        doublyLinkedList.print();
+        circularlyLinkedList.print();
         // output: 0 1 2 4 5 6
 
         System.out.println("deleteEntireList() Operation:");
-        // doublyLinkedList = 0<->1<->2<->3<->5<->6->null
-        doublyLinkedList.deleteEntireList();
+        // circularlyLinkedList = 0<->1<->2<->3<->5<->6->null
+        circularlyLinkedList.deleteEntireList();
         // after deletion, linkedList = null
         // print the nodes of the linked list
-        doublyLinkedList.print();
+        circularlyLinkedList.print();
         // output: Linked List is Empty.
     }
+
 }
