@@ -1,7 +1,8 @@
 package linkedlist;
 
-public class SinglyLinkedList {
+public class SimplyLinkedList {
 
+    // Node of the singly linked list
     class Node {
         int data;
         Node nextNode;
@@ -147,7 +148,7 @@ public class SinglyLinkedList {
     }
 
     public static void main(String[] args) {
-        SinglyLinkedList linkedList = new SinglyLinkedList();
+        SimplyLinkedList linkedList = new SimplyLinkedList();
 
         // Add 1, 2, 3, 4 nodes to the linkedList
         linkedList.addAtHead(1);
