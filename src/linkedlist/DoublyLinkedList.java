@@ -1,42 +1,43 @@
 package linkedlist;
 
-public class SimplyLinkedList {
+public class DoublyLinkedList {
 
-    // Node of the singly linked list
     class Node {
         int data;
+        Node previousNode;
         Node nextNode;
 
-        public Node(int data) {
+        Node(int data) {
             this.data = data;
+            this.previousNode = null;
             this.nextNode = null;
         }
     }
 
-    // head and tail of the singly linked list
     Node head = null;
     Node tail = null;
     int size = 0;
 
-    // addAtHead() will add a new node to the head of the linked list
+    // addAtHead() will add a new node to the head of the doubly linked list
     public void addAtHead(int data) {
         Node newNode = new Node(data);
-        if (size == 0) {
+        if (head == null) {
             head = tail = newNode;
         } else {
+            head.previousNode = newNode;
             newNode.nextNode = head;
             head = newNode;
         }
-        size++;
     }
 
-    // addAtTail() append a node of value val to the end of the linked list.
+    // addAtTail() append a node of value val to the end of the doubled linked list.
     public void addAtTail(int data) {
         Node newNode = new Node(data);
-        if (size == 0) {
+        if (head == null) {
             head = tail = newNode;
         } else {
             tail.nextNode = newNode;
+            newNode.previousNode = tail;
             tail = newNode;
         }
         size++;
@@ -49,7 +50,7 @@ public class SimplyLinkedList {
         } else if (index >= size) {
             System.out.println("Index greater than size.");
         } else {
-            for (int i = 0; i < index; ++i) {
+            for (int i = 0; i < index; i++) {
                 node = node.nextNode;
             }
         }
@@ -69,15 +70,17 @@ public class SimplyLinkedList {
         } else if (index == size) {
             addAtTail(data);
         } else {
-            Node previousNode = getNode(index - 1);
             Node newNode = new Node(data);
-            newNode.nextNode = previousNode.nextNode;
+            Node previousNode = getNode(index - 1);
+            previousNode.nextNode.previousNode = newNode;
             previousNode.nextNode = newNode;
+            newNode.previousNode = previousNode;
+            newNode.nextNode = previousNode.nextNode;
             size++;
         }
     }
 
-    // traverse() will traverse the linked list from left to right
+    // traverse() will traverse the doubly linked list from left to right
     public void traverse() {
         if (head == null) {
             return;
@@ -108,6 +111,12 @@ public class SimplyLinkedList {
 
     // deleteEntireList() method will remove references to all nodes in list.
     public void deleteEntireList() {
+        Node currentNode = head;
+        while (currentNode != null) {
+            Node tmpNode = currentNode;
+            currentNode = currentNode.nextNode;
+            tmpNode.nextNode = null;
+        }
         head = tail = null;
     }
 
@@ -121,9 +130,13 @@ public class SimplyLinkedList {
         }
         if (index == 0) {
             head = head.nextNode;
+            head.previousNode = null;
         } else {
             Node previousNode = getNode(index - 1);
             previousNode.nextNode = previousNode.nextNode.nextNode;
+            if (previousNode.nextNode.nextNode != null) {
+                previousNode.nextNode.nextNode.previousNode = previousNode;
+            }
             if (index == size - 1) {
                 tail = previousNode;
             }
@@ -131,63 +144,66 @@ public class SimplyLinkedList {
         size--;
     }
 
-    // print() will the all the nodes present in the list
+    // print the nodes values
     public void print() {
-        // initially current point will point to the first node
-        Node currentNode = head;
         if (head == null) {
-            System.out.println("Empty list.");
-        } else {
-            System.out.println("Nodes of the singly linked list:");
-            while (currentNode != null) {
-                // print node and move current pointer to the next node
-                System.out.println(currentNode.data);
-                currentNode = currentNode.nextNode;
-            }
+            System.out.println("Empty List.");
+            return;
+        }
+        Node current = head;
+        while (current != null) {
+            System.out.println(current.data);
+            current = current.nextNode;
         }
     }
 
     public static void main(String[] args) {
-        SimplyLinkedList linkedList = new SimplyLinkedList();
+        DoublyLinkedList doublyLinkedList = new DoublyLinkedList();
 
-        // Add 1, 2, 3, 4 nodes to the linkedList
-        linkedList.addAtHead(1);
-        linkedList.addAtHead(0);
-        linkedList.addAtTail(4);
-        linkedList.addAtIndex(2,2);
-        linkedList.addAtIndex(3,3);
-        linkedList.addAtTail(5);
+        doublyLinkedList.addAtTail(1);
+        doublyLinkedList.addAtTail(2);
+        doublyLinkedList.addAtTail(3);
+        doublyLinkedList.addAtTail(4);
+        doublyLinkedList.addAtTail(5);
+        doublyLinkedList.addAtTail(6);
 
-        /* 0->1->2->3->4->5->null */
+        /* 0<->1<->2<->3<->4<->5->6->null */
 
         // linkedList = 0->1->2->3->4->5->null
 
         // print the nodes of the linked list
-        linkedList.print();
-        //output: 0 1 2 3 4 5
+        doublyLinkedList.print();
+        //output: 0 1 2 3 4 5 6
 
         // print the nodes of the linked list
+        System.out.println("----------------");
         System.out.println("Traversing list:");
-        linkedList.traverse();
-        //output: 0 1 2 3 4 5
+        doublyLinkedList.traverse();
+        //output: 0 1 2 3 4 5 6
+        System.out.println("----------------");
         System.out.println("search result(Index of value 4):");
-        System.out.println(linkedList.search(4));
+        System.out.println(doublyLinkedList.search(4));
+        System.out.println("----------------");
         System.out.println("search result(Index of value 6):");
-        System.out.println(linkedList.search(6));
+        System.out.println(doublyLinkedList.search(6));
 
         // Delete a specific node
-        linkedList.deleteAtIndex(3);
+        System.out.println("----------------");
+        System.out.println("Delete a specific node: 3");
+        doublyLinkedList.deleteAtIndex(3);
 
         // print the nodes of the linked list
-        linkedList.print();
-        // output: 0 1 2 4 5
+        System.out.println("----------------");
+        System.out.println("print the nodes of the linked list");
+        doublyLinkedList.print();
+        // output: 0 1 2 4 5 6
 
         System.out.println("deleteEntireList() Operation:");
-        // linkedList = 0->1->2->3->4->5->null
-        linkedList.deleteEntireList();
+        // doublyLinkedList = 0<->1<->2<->3<->5<->6->null
+        doublyLinkedList.deleteEntireList();
         // after deletion, linkedList = null
         // print the nodes of the linked list
-        linkedList.print();
+        doublyLinkedList.print();
         // output: Linked List is Empty.
     }
 }
