@@ -147,6 +147,39 @@ public class SimplyLinkedList {
         }
     }
 
+    /*
+      Given a simply linked list of items, reverse it.
+      Example:
+      Input:
+      1 -> 2 -> 3-> 4 -> null
+      Output:
+      4 -> 3 -> 2 -> 1 -> null
+     */
+    public Node reverseRecursive(Node head) {
+        if (head == null || head.nextNode == null) {
+            return head;
+        } else {
+            Node nextNode = head.nextNode;
+            head.nextNode = null;
+            Node newHead = reverseRecursive(nextNode);
+            nextNode.nextNode = head;
+            return newHead;
+        }
+    }
+
+    public Node reverseIterative() {
+        Node previousNode = null;
+        Node currentNode = head;
+        Node tmpNode = null;
+        while (currentNode != null) {
+            tmpNode = currentNode.nextNode;
+            currentNode.nextNode = previousNode;
+            previousNode = currentNode;
+            currentNode = tmpNode;
+        }
+        return previousNode;
+    }
+
     public static void main(String[] args) {
         SimplyLinkedList linkedList = new SimplyLinkedList();
 
