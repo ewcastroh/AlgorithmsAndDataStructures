@@ -1,7 +1,5 @@
 package dynamicprogramming;
 
-import java.util.Arrays;
-
 /*
     Longest Common Subsequence
     Given two strings text1 and text1, return the length of their longest common subsequence.
