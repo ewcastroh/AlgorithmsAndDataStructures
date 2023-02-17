@@ -14,32 +14,30 @@ Graph:
 Adjacency Matrix:
 
 [       0  1  2  3  4
-	0: [0, 1, 0, 1, 1],
-	1: [1, 0, 1, 1, 0],
-	2: [0, 1, 0, 1, 0],
-	3: [1, 1, 1, 0, 1],
-	4: [1, 0, 0, 1, 0]
+	0: [0, 2, 0, 5, 3],
+	1: [0, 0, 4, 3, 0],
+	2: [0, 0, 0, 4, 0],
+	3: [0, 0, 0, 0, 2],
+	4: [0, 0, 0, 0, 0]
 ]
 
 */
-public class UnweightedUndirectedGraph {
+public class WeightedDirectedGraph {
 
     private int[][] adjacencyMatrix;
     private int vertices;
 
-    public UnweightedUndirectedGraph(int vertices) {
+    public WeightedDirectedGraph(int vertices) {
         this.vertices = vertices;
         this.adjacencyMatrix = new int[vertices][vertices];
     }
 
-    public void addEdge(int i, int j) {
-        adjacencyMatrix[i][j] = 1;
-        adjacencyMatrix[j][i] = 1;
+    public void addEdge(int i, int j, int weight) {
+        adjacencyMatrix[i][j] = weight;
     }
 
     public void removeEdge(int i, int j) {
         adjacencyMatrix[i][j] = 0;
-        adjacencyMatrix[j][i] = 0;
     }
 
     @Override
@@ -53,7 +51,7 @@ public class UnweightedUndirectedGraph {
         for (int i = 0; i < vertices; i++) {
             sb.append(i).append(": ");
             for (int j : adjacencyMatrix[i]) {
-                sb.append((j == 1 ? 1 : 0));
+                sb.append((j != 0 ? j : 0));
                 sb.append("\t");
             }
             sb.append("\n");
@@ -62,14 +60,14 @@ public class UnweightedUndirectedGraph {
     }
 
     public static void main(String[] args) {
-        UnweightedUndirectedGraph graph = new UnweightedUndirectedGraph(5);
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 4);
-        graph.addEdge(0, 3);
-        graph.addEdge(1, 2);
-        graph.addEdge(1, 3);
-        graph.addEdge(2, 3);
-        graph.addEdge(3, 4);
-        System.out.println(graph);
+        WeightedDirectedGraph graph = new WeightedDirectedGraph(5);
+        graph.addEdge(0, 1, 2);
+        graph.addEdge(0, 4, 3);
+        graph.addEdge(0, 3, 5);
+        graph.addEdge(1, 2, 4);
+        graph.addEdge(1, 3, 3);
+        graph.addEdge(2, 3, 4);
+        graph.addEdge(3, 4, 2);
+        System.out.println(graph.toString());
     }
 }

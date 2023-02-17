@@ -15,31 +15,29 @@ Adjacency Matrix:
 
 [       0  1  2  3  4
 	0: [0, 1, 0, 1, 1],
-	1: [1, 0, 1, 1, 0],
-	2: [0, 1, 0, 1, 0],
-	3: [1, 1, 1, 0, 1],
-	4: [1, 0, 0, 1, 0]
+	1: [0, 0, 1, 1, 0],
+	2: [0, 0, 0, 1, 0],
+	3: [0, 0, 0, 0, 1],
+	4: [0, 0, 0, 0, 0]
 ]
 
 */
-public class UnweightedUndirectedGraph {
+public class UnweightedDirectedGraph {
 
     private int[][] adjacencyMatrix;
     private int vertices;
 
-    public UnweightedUndirectedGraph(int vertices) {
+    public UnweightedDirectedGraph(int vertices) {
         this.vertices = vertices;
         this.adjacencyMatrix = new int[vertices][vertices];
     }
 
     public void addEdge(int i, int j) {
         adjacencyMatrix[i][j] = 1;
-        adjacencyMatrix[j][i] = 1;
     }
 
     public void removeEdge(int i, int j) {
         adjacencyMatrix[i][j] = 0;
-        adjacencyMatrix[j][i] = 0;
     }
 
     @Override
@@ -62,7 +60,7 @@ public class UnweightedUndirectedGraph {
     }
 
     public static void main(String[] args) {
-        UnweightedUndirectedGraph graph = new UnweightedUndirectedGraph(5);
+        UnweightedDirectedGraph graph = new UnweightedDirectedGraph(5);
         graph.addEdge(0, 1);
         graph.addEdge(0, 4);
         graph.addEdge(0, 3);
@@ -70,6 +68,6 @@ public class UnweightedUndirectedGraph {
         graph.addEdge(1, 3);
         graph.addEdge(2, 3);
         graph.addEdge(3, 4);
-        System.out.println(graph);
+        System.out.println(graph.toString());
     }
 }
